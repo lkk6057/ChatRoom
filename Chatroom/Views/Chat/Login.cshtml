@@ -1,0 +1,23 @@
+﻿@model Chatroom.Models.Response
+
+@{
+    ViewBag.Title = "Login";
+    string message = Model.response;
+}
+<center>
+    @message
+    <br>
+    <br>
+    <form action="/Chat/SendLogin" method="post">
+        Username:<br>
+        <input type="text" name="username" autofocus>
+        <br>
+        <br>
+        Password:<br>
+        <input type="password" name="password">
+        <br>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</center>
+

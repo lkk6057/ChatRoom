@@ -1,0 +1,73 @@
+﻿@model Chatroom.Models.Token
+
+@{
+    ViewBag.Title = "ChatRoom";
+    string token = Model.token;
+}
+
+<style>
+    input[name="message"] {
+        width: 95%;
+        position: fixed;
+        bottom: 10px;
+    }
+
+    input[name="submit"] {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+    }
+</style>
+<style>
+    p[id="content"] {
+        width: 1600px;
+    }
+    p[id="content"].content {
+        word-break: break-all;
+    }
+    p[id="online"] {
+        width: 300px;
+        position:fixed;
+        top:0;
+        right:-100px;
+    }
+</style>
+<p id="content" class="content"></p>
+<p align="center" id="online" class="online"></p>
+<form id="form1" name="form1" action="/Chat/SendMessage" method="post">
+    <input type="text" name="message" autofocus autocomplete="off" maxlength="10000">
+    <input type="hidden" value=@token name="token">
+    <input type="submit" value="Submit" name="submit">
+</form>
+<script>
+    get();
+    window.scrollTo(0, document.body.scrollHeight);
+    function get() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = this.responseText
+                if (document.getElementById("content").innerHTML != response) {
+                    document.getElementById("content").innerHTML = response;
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+            }
+        };
+        xhttp.open("POST", "Get", false);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("token=" + document.form1.elements['token'].value);
+        var getonline = new XMLHttpRequest();
+        getonline.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = this.responseText;
+                if (document.getElementById("online").innerHTML != response) {
+                    document.getElementById("online").innerHTML = response;
+                }
+            }
+        };
+        getonline.open("GET", "GetOnline", false);
+        getonline.send();
+        setTimeout(arguments.callee, 1000);
+    }
+</script>
+
